@@ -29,6 +29,20 @@ namespace PDFSigner.Migrations
                 {
                     table.PrimaryKey("PK_Company", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Document",
+                schema: "public",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PdfFile = table.Column<byte[]>(type: "bytea", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Document", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -36,6 +50,10 @@ namespace PDFSigner.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Company",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "Document",
                 schema: "public");
         }
     }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using PDFSigner.Data.Entities;
 using PDFSigner.DTOs;
 using PDFSigner.Managers.Interfaces;
-using System.Text.Json.Nodes;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

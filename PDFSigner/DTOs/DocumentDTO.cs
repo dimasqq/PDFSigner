@@ -3,16 +3,16 @@
     public class DocumentDTO
     {
         public int Id { get; set; }
-        public byte[] PdfFile { get; set; }
+        public string FilePath { get; set; }
     }
 
     public class DocumentPutDTO
     {
-        public byte[] PdfFile { get; set; }
+        public string FilePath { get; set; }
     }
 
     public class DocumentPostDTO
     {
-        public byte[] PdfFile { get; set;}
+        public string FilePath { get; set; }
     }
 }

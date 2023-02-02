@@ -14,6 +14,6 @@ namespace PDFSigner.Data.Entities
         public int Id { get; set; }
         [Column("PdfFile")]
         [Required]
-        public byte[] PdfFile { get; set; }
+        public string FilePath { get; set; }
     }
 }

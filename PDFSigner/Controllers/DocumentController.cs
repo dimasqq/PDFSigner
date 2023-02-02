@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using PDFSigner.Data.Entities;
 using PDFSigner.DTOs;
 using PDFSigner.Managers.Interfaces;
+using System.Text.Json.Nodes;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,8 +30,14 @@ namespace PDFSigner.Controllers
 
         // POST api/<DocumentController>
         [HttpPost]
-        public async Task<ActionResult<DocumentDTO>> Post([FromBody] DocumentPostDTO document)
+        public async Task<ActionResult<DocumentDTO>> Post(DocumentPostDTO document)
         {
+            /*using (var ms = new MemoryStream())
+            {
+                documentFile.RecievedFile.CopyTo(ms);
+                document.PdfFile = ms.ToArray();
+            }*/
+
             var inserted = await _manager.InsertAsync(document);
             return CreatedAtAction(nameof(GetById), new { id = inserted.Id }, inserted);
         }
@@ -45,8 +53,10 @@ namespace PDFSigner.Controllers
 
         // DELETE api/<DocumentController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<DocumentDTO>> Delete(int id)
         {
+            await _manager.DeleteAsync(id);
+            return Ok();
         }
     }
 }

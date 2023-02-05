@@ -5,6 +5,7 @@ using PDFSigner.Data.Repositories;
 using PDFSigner.Data.Repositories.Interfaces;
 using PDFSigner.Managers;
 using PDFSigner.Managers.Interfaces;
+using PDFSigner.QRCode;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddScoped<ICompanyManager, CompanyManager>();
 builder.Services.AddScoped<IDocumentManager, DocumentManager>();
 builder.Services.AddScoped<ICompanyRepository, ComapnyRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IQRCodePlacer, QRCodePlacer>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

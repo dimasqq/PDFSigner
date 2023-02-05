@@ -37,17 +37,53 @@ namespace PDFSigner.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PdfFile = table.Column<byte[]>(type: "bytea", nullable: false)
+                    PdfFile = table.Column<string>(type: "text", nullable: false),
+                    IsSigned = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Document", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "RLCompanyDocument",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(type: "integer", nullable: false),
+                    DocumentId = table.Column<int>(type: "integer", nullable: false),
+                    IsViewed = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RLCompanyDocument", x => new { x.CompanyId, x.DocumentId });
+                    table.ForeignKey(
+                        name: "FK_RLCompanyDocument_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalSchema: "public",
+                        principalTable: "Company",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RLCompanyDocument_Document_DocumentId",
+                        column: x => x.DocumentId,
+                        principalSchema: "public",
+                        principalTable: "Document",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RLCompanyDocument_DocumentId",
+                table: "RLCompanyDocument",
+                column: "DocumentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "RLCompanyDocument");
+
             migrationBuilder.DropTable(
                 name: "Company",
                 schema: "public");

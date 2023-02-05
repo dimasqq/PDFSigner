@@ -11,8 +11,8 @@ using PDFSigner.Data;
 namespace PDFSigner.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230201130946_Initial-Create")]
-    partial class InitialCreate
+    [Migration("20230205144227_UrlForDocument")]
+    partial class UrlForDocument
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,26 @@ namespace PDFSigner.Migrations
                     b.ToTable("Company", "public");
                 });
 
+            modelBuilder.Entity("PDFSigner.Data.Entities.CompanyDocument", b =>
+                {
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("DocumentId")
+                        .HasColumnType("integer")
+                        .HasColumnOrder(1);
+
+                    b.Property<bool>("IsViewed")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("CompanyId", "DocumentId");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("RLCompanyDocument");
+                });
+
             modelBuilder.Entity("PDFSigner.Data.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
@@ -65,14 +85,50 @@ namespace PDFSigner.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("PdfFile")
+                    b.Property<string>("DocumentURL")
                         .IsRequired()
-                        .HasColumnType("bytea")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("PdfFile");
+
+                    b.Property<bool>("IsSigned")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
                     b.ToTable("Document", "public");
+                });
+
+            modelBuilder.Entity("PDFSigner.Data.Entities.CompanyDocument", b =>
+                {
+                    b.HasOne("PDFSigner.Data.Entities.Company", "SignCompany")
+                        .WithMany("DocumentSigners")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PDFSigner.Data.Entities.Document", "SignDocument")
+                        .WithMany("SignCompanies")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SignCompany");
+
+                    b.Navigation("SignDocument");
+                });
+
+            modelBuilder.Entity("PDFSigner.Data.Entities.Company", b =>
+                {
+                    b.Navigation("DocumentSigners");
+                });
+
+            modelBuilder.Entity("PDFSigner.Data.Entities.Document", b =>
+                {
+                    b.Navigation("SignCompanies");
                 });
 #pragma warning restore 612, 618
         }

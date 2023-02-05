@@ -11,7 +11,7 @@ namespace PDFSigner.Data.Repositories
         protected readonly UContext _context;
         public BaseRepository(UContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         public IQueryable<T> GetAll()
@@ -28,7 +28,7 @@ namespace PDFSigner.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<T> InsertAsync(T entity)
+        public virtual async Task<T> InsertAsync(T entity)
         {
             await _context.AddAsync(entity);
 

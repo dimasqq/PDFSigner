@@ -15,5 +15,9 @@ namespace PDFSigner.Data.Entities
         [Column("PdfFile")]
         [Required]
         public string FilePath { get; set; }
+        public string DocumentURL { get; set; }
+        public bool IsSigned { get; set; }
+        public virtual ICollection<CompanyDocument> SignCompanies { get; set; }
+
     }
 }

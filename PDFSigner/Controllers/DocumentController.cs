@@ -48,6 +48,31 @@ namespace PDFSigner.Controllers
             return Ok(entity);
         }
 
+        [HttpPut("/Sign/{id}")]
+        public async Task<ActionResult<DocumentDTO>> Sign(int id)
+        {
+            var entity = await _manager.SignAsync(id);
+
+            return Ok(entity);
+        }
+
+        [HttpPost("/AddSigner")]
+        public async Task<ActionResult<CompanyDocumentDTO>> AddSigner(int companyId, int documentId)
+        {
+            var entity = await _manager.AddSigner(companyId, documentId);
+
+            return Ok(entity);
+        }
+
+        [HttpGet("/ViewDocument")]
+        public async Task<ActionResult<CompanyDocumentDTO>> ViewDocument(int companyId, int documentId)
+        {
+            var entity = await _manager.ViewDocument(companyId, documentId);
+
+            return Ok(entity);
+        }
+
+
         // DELETE api/<DocumentController>/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<DocumentDTO>> Delete(int id)

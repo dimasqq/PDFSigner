@@ -23,6 +23,7 @@ namespace PDFSigner.Data.Entities
         [MaxLength(200)]
         [Required]
         public string Details { get; set; } = string.Empty;
+        public virtual ICollection<CompanyDocument> DocumentSigners { get; set; }
 
     }
 }

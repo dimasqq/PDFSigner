@@ -49,5 +49,28 @@ namespace PDFSigner.Managers
 
             return _mapper.Map<DocumentDTO>(mapped);
         }
+
+        public async Task<DocumentDTO> SignAsync(int id)
+        {
+            var signed = await _documentRepository.SignAsync(id);
+            await SaveChangesAsync();
+
+            return _mapper.Map<DocumentDTO>(signed);
+        }
+
+        public async Task<CompanyDocumentDTO> AddSigner(int companyid, int documentId)
+        {
+            var added = await _documentRepository.AddSigner(companyid, documentId);
+            await SaveChangesAsync();
+
+            return _mapper.Map<CompanyDocumentDTO>(added);
+        }
+        public async Task<CompanyDocumentDTO> ViewDocument(int companyid, int documentId)
+        {
+            var added = await _documentRepository.ViewDocument(companyid, documentId);
+            await SaveChangesAsync();
+
+            return _mapper.Map<CompanyDocumentDTO>(added);
+        }
     }
 }

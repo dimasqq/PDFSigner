@@ -21,17 +21,28 @@ namespace PDFSigner.Data.Repositories
             this._qrCodePlacer = qrCodePlacer;
         }
 
-        public override Task<Document> InsertAsync(Document entity)
+        /// <summary>
+        /// Add document to database with URL generated
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
+        public override Task<Document> InsertAsync(Document document)
         {
-            var uri = new Uri(entity.FilePath);
-            entity.DocumentURL = uri.AbsoluteUri;
-            return base.InsertAsync(entity);
+            var uri = new Uri(document.FilePath);
+            document.DocumentURL = uri.AbsoluteUri;
+            return base.InsertAsync(document);
         }
 
-        public async Task<Document> SignAsync(int id)
+        /// <summary>
+        /// Checks signers and sign document with QR
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<Document> SignAsync(int documentId)
         {
             var toSign = _context.Documents
-                .Where(d => d.Id == id)
+                .Where(d => d.Id == documentId)
                 .Include(sc => sc.SignCompanies)
                 .ThenInclude(sc => sc.SignCompany)
                 .FirstOrDefault();
@@ -57,9 +68,16 @@ namespace PDFSigner.Data.Repositories
 
             var result = _context.Update(toSign);
             await _context.SaveChangesAsync();
-            return _context.Documents.Where(doc => doc.Id == id).FirstOrDefault();
+            return _context.Documents.Where(doc => doc.Id == documentId).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Add signer company to document
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<CompanyDocument> AddSigner(int companyId, int documentId)
         {
             var signer = _context.CompanyDocuments
@@ -94,6 +112,13 @@ namespace PDFSigner.Data.Repositories
                 .SingleOrDefault();
         }
 
+        /// <summary>
+        /// Mark document as viewed
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<CompanyDocument> ViewDocument(int companyId, int documentId)
         {
             var document = _context.Documents
